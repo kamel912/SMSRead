@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 class ApiClient {
-    private static final String BASE_URL = "https://1ryh8tvl74.execute-api.us-east-1.amazonaws.com/";
+    private static final String BASE_URL = "https://hy3gm2dndd.execute-api.us-east-1.amazonaws.com/";
     private static Retrofit retrofit ;
 
     static Retrofit getApiClient(){

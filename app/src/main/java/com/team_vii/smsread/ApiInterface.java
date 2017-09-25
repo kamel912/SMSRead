@@ -11,8 +11,9 @@ import retrofit2.http.Query;
  */
 
 interface ApiInterface {
-    @GET("dev")
-    Call<ResponseFromServer> getMessages(@Query("Type") String type,
-                                 @Query("Number") String number,
-                                 @Query("Message") String message);
+    @GET("Prod")
+    Call<ResponseFromServer> getMessages(@Query("Clientid") String clientId,
+                                         @Query("Type") String type,
+                                         @Query("Number") String number,
+                                         @Query("Message") String message);
 }

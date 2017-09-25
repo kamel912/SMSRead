@@ -7,10 +7,6 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,8 +19,10 @@ import static com.team_vii.smsread.MainActivity.mSwitch;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
+    private static final String SMS_SENT     = "android.provider.Telephony.SMS_SENT";
     private static final String TAG = "SMSBroadcastReceiver";
-ResponseFromServer fromServer;
+    ResponseFromServer fromServer;
+
     @Override
     public void onReceive(final Context context, Intent intent) {
         if(intent.getAction().equals(SMS_RECEIVED)){
@@ -40,30 +38,29 @@ ResponseFromServer fromServer;
                     msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     msgFrom = msgs[i].getOriginatingAddress();
                     msgBody = msgs[i].getMessageBody();
-                    if (mSwitch.isChecked()){
-                        ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-                        Call<ResponseFromServer> call = apiInterface.getMessages("incoming",msgFrom,msgBody);
-                        call.enqueue(new Callback<ResponseFromServer>() {
-                            @Override
-                            public void onResponse(Call<ResponseFromServer> call, Response<ResponseFromServer> response) {
-                                fromServer = response.body();
-                                String type =fromServer.getParams().getQuerystring().getType(),
-                                       number = fromServer.getParams().getQuerystring().getNumber(),
-                                       message = fromServer.getParams().getQuerystring().getMessage();
-                                Toast.makeText(context,type + "\n" + number + "\n" + message, Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseFromServer> call, Throwable t) {
-                                Log.d("my error",t.getMessage());
-                            }
-                        });
-
-
-                    }else if (!mSwitch.isChecked())
-                        Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show();
-                    }
+                    forward(context,"incomming",msgFrom,msgBody);
+                }
             }
+        }
+    }
+
+    void forward(final Context context, String type, String number, String message){
+        if (mSwitch.isChecked()){
+            ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+            Call<ResponseFromServer> call = apiInterface.getMessages("testmohamed",type,number,message);
+            call.enqueue(new Callback<ResponseFromServer>() {
+                @Override
+                public void onResponse(Call<ResponseFromServer> call, Response<ResponseFromServer> response) {
+                    fromServer = response.body();
+                    String result = fromServer.getRespons();
+                    Toast.makeText(context,result, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseFromServer> call, Throwable t) {
+                    Log.d("my error",t.getMessage());
+                }
+            });
         }
     }
 }

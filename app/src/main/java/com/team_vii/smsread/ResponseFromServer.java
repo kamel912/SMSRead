@@ -7,13 +7,15 @@ import com.google.gson.annotations.SerializedName;
 class ResponseFromServer {
 
 
-    @SerializedName("params")
+    @SerializedName("ok")
     @Expose
-    private Params params;
+    private boolean ok;
 
+    @SerializedName("message")
+    @Expose
+    private String respons;
 
-
-    Params getParams() {
-        return params;
+    public String getRespons() {
+        return respons;
     }
 }
