@@ -1,30 +1,25 @@
 package com.team_vii.smsread;
 
 import android.Manifest;
-import android.content.ContentResolver;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    static Switch mSwitch;
-    Switch cSwitch;
+    static boolean isSwitchChecked = false;
+    Switch cSwitch,mSwitch;
     TextView result;
-    ResponseFromServer fromServer;
+    static Date now;
+    Intent startBroadcasting;
 
 
     @Override
@@ -33,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         result = (TextView) findViewById(R.id.result);
-
         mSwitch = (Switch) findViewById(R.id.switch1);
         cSwitch = (Switch) findViewById(R.id.switch2);
         cSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -45,28 +39,32 @@ public class MainActivity extends AppCompatActivity {
                     callForward("off");
             }
         });
-
-        if (mSwitch.isChecked()){
-
-            SendSmsObserver smsObeserver = (new SendSmsObserver(new Handler()));
-            ContentResolver contentResolver = this.getContentResolver();
-            contentResolver.registerContentObserver(Uri.parse("content://sms"),true, smsObeserver);
-            /*ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
-            Call<ResponseFromServer> call = apiInterface.getMessages("testmohamed","outcomming","","");
-            call.enqueue(new Callback<ResponseFromServer>() {
-                @Override
-                public void onResponse(Call<ResponseFromServer> call, Response<ResponseFromServer> response) {
-                    fromServer = response.body();
-                    String result = fromServer.getRespons();
-                    Toast.makeText(MainActivity.this,result, Toast.LENGTH_SHORT).show();
+        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mSwitch.isChecked()){
+                    isSwitchChecked = true;
+                    now = new Date();
+                    startBroadcasting = new Intent(MainActivity.this, MyService.class);
+                    startService(startBroadcasting);
+                    getPackageManager().setComponentEnabledSetting(
+                            new ComponentName(getApplicationContext(), MyService.class),
+                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                            PackageManager.DONT_KILL_APP);
+                }else if (!mSwitch.isChecked()){
+                    isSwitchChecked = false;
+                    now = null;
+                    startBroadcasting = new Intent(MainActivity.this, MyService.class);
+                    stopService(startBroadcasting);
+                    getPackageManager().setComponentEnabledSetting(
+                            new ComponentName(getApplicationContext(), MyService.class),
+                            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                            PackageManager.DONT_KILL_APP);
                 }
 
-                @Override
-                public void onFailure(Call<ResponseFromServer> call, Throwable t) {
-                    Log.d("my error",t.getMessage());
-                }
-            });*/
-        }
+            }
+        });
+
 
 
     }
@@ -88,19 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public class SendSmsObserver extends ContentObserver {
 
-        public SendSmsObserver(Handler handler) {
-            super(handler);
-        }
 
-        @Override
-        public void onChange(boolean selfChange) {
-            super.onChange(selfChange);
-            // save the message to the SD card here
 
-            Log.d("sent sms", "one text send");
-
-        }
-    }
 }

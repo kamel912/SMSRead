@@ -7,11 +7,12 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.team_vii.smsread.MainActivity.mSwitch;
+import static com.team_vii.smsread.MainActivity.isSwitchChecked;
 
 /**
  * Created by MK on 9/22/2017.
@@ -19,7 +20,6 @@ import static com.team_vii.smsread.MainActivity.mSwitch;
 
 public class SMSBroadcastReceiver extends BroadcastReceiver {
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
-    private static final String SMS_SENT     = "android.provider.Telephony.SMS_SENT";
     private static final String TAG = "SMSBroadcastReceiver";
     ResponseFromServer fromServer;
 
@@ -38,14 +38,17 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                     msgs[i] = SmsMessage.createFromPdu((byte[])pdus[i]);
                     msgFrom = msgs[i].getOriginatingAddress();
                     msgBody = msgs[i].getMessageBody();
-                    forward(context,"incomming",msgFrom,msgBody);
+                    if(intent.getAction().equals(SMS_RECEIVED))
+                        forward(context,"incomming",msgFrom,msgBody);
+
+
                 }
             }
         }
     }
 
     void forward(final Context context, String type, String number, String message){
-        if (mSwitch.isChecked()){
+        if (isSwitchChecked){
             ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
             Call<ResponseFromServer> call = apiInterface.getMessages("testmohamed",type,number,message);
             call.enqueue(new Callback<ResponseFromServer>() {
