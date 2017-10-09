@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
     Switch cSwitch,mSwitch;
     TextView result;
     static Date now;
-    Intent startBroadcasting;
 
 
     @Override
@@ -45,21 +44,9 @@ public class MainActivity extends AppCompatActivity {
                 if (mSwitch.isChecked()){
                     isSwitchChecked = true;
                     now = new Date();
-                    startBroadcasting = new Intent(MainActivity.this, MyService.class);
-                    startService(startBroadcasting);
-                    getPackageManager().setComponentEnabledSetting(
-                            new ComponentName(getApplicationContext(), MyService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP);
                 }else if (!mSwitch.isChecked()){
                     isSwitchChecked = false;
                     now = null;
-                    startBroadcasting = new Intent(MainActivity.this, MyService.class);
-                    stopService(startBroadcasting);
-                    getPackageManager().setComponentEnabledSetting(
-                            new ComponentName(getApplicationContext(), MyService.class),
-                            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-                            PackageManager.DONT_KILL_APP);
                 }
 
             }

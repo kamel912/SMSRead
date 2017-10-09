@@ -15,7 +15,7 @@ class ResponseFromServer {
     @Expose
     private String respons;
 
-    public String getRespons() {
+    String getRespons() {
         return respons;
     }
 }
