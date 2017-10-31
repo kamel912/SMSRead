@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "60333743568",
+    "firebase_url": "https://smsread-79948.firebaseio.com",
+    "project_id": "smsread-79948",
+    "storage_bucket": "smsread-79948.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60333743568:android:630d426f81fe76c3",
+        "android_client_info": {
+          "package_name": "com.team_vii.smsread"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "60333743568-q61m3fokgdvjdsel4bi3nsghl4sdobm8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.team_vii.smsread",
+            "certificate_hash": "fd2d050df9790dc7fcc79ae6119c463d0a53aa18"
+          }
+        },
+        {
+          "client_id": "60333743568-j06ii9qjfa93ign61s3kadnthbfm6hje.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvAdCkpUDweXQs2KltnyROxExgjdM7oS0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "60333743568-j06ii9qjfa93ign61s3kadnthbfm6hje.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

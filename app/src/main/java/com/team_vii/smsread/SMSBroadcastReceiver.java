@@ -12,7 +12,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.team_vii.smsread.MainActivity.isSwitchChecked;
 
 /**
  * Created by MK on 9/22/2017.
@@ -48,7 +47,6 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
     }
 
     void forward(final Context context, String type, String number, String message){
-        if (isSwitchChecked){
             ApiInterface apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
             Call<ResponseFromServer> call = apiInterface.getMessages("testmohamed",type,number,message);
             call.enqueue(new Callback<ResponseFromServer>() {
@@ -64,6 +62,5 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                     Log.d("my error",t.getMessage());
                 }
             });
-        }
     }
 }
